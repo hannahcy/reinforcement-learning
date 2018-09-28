@@ -2,6 +2,10 @@ from frozenlakegame import frozenlakegame
 import numpy as np
 import tensorflow as tf
 import sys
+import os
+
+os.environ["CUDA_DEVICE_ORDER"] = "PCI_BUS_ID"
+os.environ["CUDA_VISIBLE_DEVICES"] = "1"
 
 """agent.py: Implementation of random action agent for COSC470 Assignment 3.
 """
@@ -183,7 +187,7 @@ with tf.device(device):
                     else:
                         infoStr += "timeout, "
                 win_rate = np.sum(win_history)/len(win_history)
-                if e > 0 and e+1 % 1000 == 0:
+                if e > 0 and (e+1) % 1000 == 0:
                     win_history_100 = win_history[-500:]
                     win_rate = np.sum(win_history_100)/500
                     infoStr += "wins rate: %.2f" % win_rate
