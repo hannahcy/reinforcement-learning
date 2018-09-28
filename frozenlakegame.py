@@ -232,7 +232,7 @@ class frozenlakegame:
         return np.array(self.__state), np.array(self.__R[y,x])
 
     # Shows a visualisation of the game
-    def show(self, s=None, blocking=False):
+    def show(self, s=None, blocking=False, id=""):
         if self.__episode_count == 0:
             raise Exception('Need to reset the environment before use.')
 
@@ -312,4 +312,6 @@ class frozenlakegame:
         else:
             plt.ioff()
 
-        plt.show()
+        plt.savefig("results/graph"+id+".png")
+        #plt.show()
+

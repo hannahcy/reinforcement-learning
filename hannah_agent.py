@@ -16,17 +16,18 @@ __version__ = "1.0.0"
 __email__ = "lechszym@cs.otago.ac.nz"
 
 ''' CONFIGURABLE PARAMETERS '''
+id = "16-2-16-2-16_01_09" # added to saved models and graphs to identify
 online = True
 explore = 0.1
-weight = 0.99
-device = '/gpu:0'
-n_filters_conv1 = 64
+weight = 0.9
+device = '/cpu:0'
+n_filters_conv1 = 16
 filter_size_conv1 = 2
 stride1 = 1
-n_filters_conv2 = 64
+n_filters_conv2 = 16
 filter_size_conv2 = 2
 stride2 = 1
-fc1_layer_size = 64
+fc1_layer_size = 16
 
 ''' PERSISTING PARAMETERS '''
 img_size = 4
@@ -40,9 +41,9 @@ num_channels = 3
 env = frozenlakegame(R=-0.05)
 
 # Number of learning episodes
-num_episodes = 1000000
+num_episodes = 100000
 # Maximum number of steps per episode
-max_steps_per_episode = 20 # 40
+max_steps_per_episode = 40
 
 win_history = []
 
@@ -187,15 +188,17 @@ with tf.device(device):
                     else:
                         infoStr += "timeout, "
                 win_rate = np.sum(win_history)/len(win_history)
-                if e > 0 and (e+1) % 1000 == 0:
-                    win_history_100 = win_history[-500:]
-                    win_rate = np.sum(win_history_100)/500
-                    infoStr += "wins rate: %.2f" % win_rate
-                    print(infoStr)
+                if (e+1) % 100 == 0:
+                #    win_history_100 = win_history[-100:]
+                #    win_rate = np.sum(win_history_100)/100
+                    infoStr += "wins rate: %.2f \n" % win_rate
+                    with open("results/"+id+".txt", 'a') as f:
+                        f.write(infoStr)
+                    #print(infoStr)
                     sys.stdout.flush()
                 #if win_rate > 0.5:
                     #save_path = saver.save(sess, "trained/trained_" + str(win_rate))
-            save_path = saver.save(sess, "trained/trained_"+str(win_rate))
+            save_path = saver.save(sess, "trained/"+id+"_"+str(win_rate))
 
 # Show the final score (ratio of wins over episodes)
-env.show(blocking=True)
+env.show(blocking=True,id=id)
