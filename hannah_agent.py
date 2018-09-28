@@ -16,7 +16,6 @@ __version__ = "1.0.0"
 __email__ = "lechszym@cs.otago.ac.nz"
 
 ''' CONFIGURABLE PARAMETERS '''
-id = "16-2-16-2-16_01_09" # added to saved models and graphs to identify
 online = True
 explore = 0.1
 weight = 0.9
@@ -28,6 +27,9 @@ n_filters_conv2 = 16
 filter_size_conv2 = 2
 stride2 = 1
 fc1_layer_size = 16
+exp = int(explore*100)
+w = int(weight*100)
+id = str(n_filters_conv1)+"-"+str(filter_size_conv1)+"-"+str(n_filters_conv2)+"-"+str(filter_size_conv2)+"-"+str(fc1_layer_size)+"_"+str(exp)+"_"+str(w) # added to saved models and graphs to identify
 
 ''' PERSISTING PARAMETERS '''
 img_size = 4
@@ -41,7 +43,7 @@ num_channels = 3
 env = frozenlakegame(R=-0.05)
 
 # Number of learning episodes
-num_episodes = 100000
+num_episodes = 100000 # one hundred thousand -- things seem to have levelled off by then
 # Maximum number of steps per episode
 max_steps_per_episode = 40
 
@@ -187,10 +189,13 @@ with tf.device(device):
                         infoStr += "loss, "
                     else:
                         infoStr += "timeout, "
-                win_rate = np.sum(win_history)/len(win_history)
+
                 if (e+1) % 100 == 0:
-                #    win_history_100 = win_history[-100:]
-                #    win_rate = np.sum(win_history_100)/100
+                    if (e+1) > 1000:
+                        win_history_1000 = win_history[-1000:]
+                        win_rate = np.sum(win_history_1000)/1000
+                    else:
+                        win_rate = np.sum(win_history) / len(win_history)
                     infoStr += "wins rate: %.2f \n" % win_rate
                     with open("results/"+id+".txt", 'a') as f:
                         f.write(infoStr)

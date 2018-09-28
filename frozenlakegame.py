@@ -312,6 +312,6 @@ class frozenlakegame:
         else:
             plt.ioff()
 
-        plt.savefig("results/graph"+id+".png")
+        plt.savefig("results/"+id+".png")
         #plt.show()
 
