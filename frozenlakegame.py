@@ -2,6 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.patches import Rectangle
 from matplotlib.ticker import MaxNLocator
+plt.switch_backend('agg')
 import time
 
 """frozenlakegame.py: Implementation of the frozen lake game for COSC470 Assignment 3.
