@@ -20,13 +20,13 @@ online = True
 explore = 0.1
 weight = 0.99
 device = '/gpu:0'
-n_filters_conv1 = 16
+n_filters_conv1 = 256
 filter_size_conv1 = 3
 stride1 = 1
-n_filters_conv2 = 32
+n_filters_conv2 = 512
 filter_size_conv2 = 3
 stride2 = 1
-fc1_layer_size = 64
+fc1_layer_size = 1024
 exp = int(explore*100)
 w = int(weight*100)
 id = str(n_filters_conv1)+"-"+str(filter_size_conv1)+"-"+str(n_filters_conv2)+"-"+str(filter_size_conv2)+"-"+str(fc1_layer_size)+"_"+str(exp)+"_"+str(w) # added to saved models and graphs to identify
@@ -39,7 +39,7 @@ id = str(n_filters_conv1)+"-"+str(filter_size_conv1)+"-"+str(n_filters_conv2)+"-
 env = frozenlakegame(R=-0.05)
 
 # Number of learning episodes
-num_episodes = 100000 # one hundred thousand -- things seem to have levelled off by then
+num_episodes = 10 #0000 # one hundred thousand -- things seem to have levelled off by then
 # Maximum number of steps per episode
 max_steps_per_episode = 40
 
