@@ -17,10 +17,10 @@ __email__ = "lechszym@cs.otago.ac.nz"
 
 ''' CONFIGURABLE PARAMETERS '''
 online = True
-explore = 0.2
+explore = 0.15
 weight = 0.99
 device = '/gpu:0'
-n_filters_conv1 = 16
+n_filters_conv1 = 32
 filter_size_conv1 = 2
 stride1 = 1
 n_filters_conv2 = 32
@@ -29,11 +29,13 @@ stride2 = 1
 #n_filters_conv3 = 64
 #filter_size_conv3 = 2
 #stride3 = 1
-fc1_layer_size = 128
+fc1_layer_size = 32
 exp = int(explore*100)
 w = int(weight*100)
-id = str(n_filters_conv1)+"-"+str(filter_size_conv1)+"-"+str(n_filters_conv2)+"-"+str(filter_size_conv2)+"-"+\
+id = str(n_filters_conv1)+"-"+str(filter_size_conv1)+"-"+\
      str(fc1_layer_size)+"_"+str(exp)+"_"+str(w) # used to name output text files, saved models, and graphs to identify
+
+    #str(n_filters_conv2)+"-"+str(filter_size_conv2)+"-"+\
      #str(n_filters_conv3) + "-" + str(filter_size_conv3) + "-" +
 
 # Instantiate the game
