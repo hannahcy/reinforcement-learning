@@ -39,7 +39,7 @@ id = str(n_filters_conv1)+"-"+str(filter_size_conv1)+"-"+str(n_filters_conv2)+"-
 env = frozenlakegame(R=-0.05)
 
 # Number of learning episodes
-num_episodes = 100 #0000 # one hundred thousand -- things seem to have levelled off by then
+num_episodes = 100000 # one hundred thousand -- things seem to have levelled off by then
 # Maximum number of steps per episode
 max_steps_per_episode = 40
 
