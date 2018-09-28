@@ -1,6 +1,7 @@
 from frozenlakegame import frozenlakegame
 import numpy as np
 import tensorflow as tf
+import sys
 
 """agent.py: Implementation of random action agent for COSC470 Assignment 3.
 """
@@ -35,9 +36,9 @@ num_channels = 3
 env = frozenlakegame(R=-0.05)
 
 # Number of learning episodes
-num_episodes = 2000000
+num_episodes = 1000000
 # Maximum number of steps per episode
-max_steps_per_episode = 40
+max_steps_per_episode = 20 # 40
 
 win_history = []
 
@@ -182,10 +183,14 @@ with tf.device(device):
                     else:
                         infoStr += "timeout, "
                 win_rate = np.sum(win_history)/len(win_history)
-                infoStr += "wins rate: %.2f" % win_rate
-
-
-                print(infoStr)
+                if e > 0 and e+1 % 1000 == 0:
+                    win_history_100 = win_history[-500:]
+                    win_rate = np.sum(win_history_100)/500
+                    infoStr += "wins rate: %.2f" % win_rate
+                    print(infoStr)
+                    sys.stdout.flush()
+                #if win_rate > 0.5:
+                    #save_path = saver.save(sess, "trained/trained_" + str(win_rate))
             save_path = saver.save(sess, "trained/trained_"+str(win_rate))
 
 # Show the final score (ratio of wins over episodes)
