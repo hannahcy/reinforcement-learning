@@ -17,25 +17,25 @@ __email__ = "lechszym@cs.otago.ac.nz"
 
 ''' CONFIGURABLE PARAMETERS '''
 online = True
-explore = 0.15
+explore = 0.10
 weight = 0.99
 device = '/gpu:0'
-n_filters_conv1 = 32
+n_filters_conv1 = 16
 filter_size_conv1 = 2
 stride1 = 1
-n_filters_conv2 = 32
+n_filters_conv2 = 16
 filter_size_conv2 = 2
 stride2 = 1
 #n_filters_conv3 = 64
 #filter_size_conv3 = 2
 #stride3 = 1
-fc1_layer_size = 32
+fc1_layer_size = 16
 exp = int(explore*100)
 w = int(weight*100)
-id = str(n_filters_conv1)+"-"+str(filter_size_conv1)+"-"+\
+id = str(n_filters_conv1)+"-"+str(filter_size_conv1)+"-"+str(n_filters_conv2)+"-"+str(filter_size_conv2)+"-"+\
      str(fc1_layer_size)+"_"+str(exp)+"_"+str(w) # used to name output text files, saved models, and graphs to identify
 
-    #str(n_filters_conv2)+"-"+str(filter_size_conv2)+"-"+\
+    #
      #str(n_filters_conv3) + "-" + str(filter_size_conv3) + "-" +
 
 # Instantiate the game
@@ -46,7 +46,7 @@ id = str(n_filters_conv1)+"-"+str(filter_size_conv1)+"-"+\
 env = frozenlakegame(R=-0.05)
 
 # Number of learning episodes
-num_episodes = 100000 # one hundred thousand -- things seem to have levelled off by then
+num_episodes = 1000000 # one hundred thousand -- things seem to have levelled off by then
 # Maximum number of steps per episode
 max_steps_per_episode = 40
 
