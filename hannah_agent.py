@@ -29,11 +29,11 @@ stride2 = 1
 #n_filters_conv3 = 64
 #filter_size_conv3 = 2
 #stride3 = 1
-fc1_layer_size = 64
+fc1_layer_size = 128
 exp = int(explore*100)
 w = int(weight*100)
 id = str(n_filters_conv1)+"-"+str(filter_size_conv1)+"-"+str(n_filters_conv2)+"-"+str(filter_size_conv2)+"-"+\
-     str(fc1_layer_size)+"_"+str(exp)+"_"+str(w) # added to saved models and graphs to identify
+     str(fc1_layer_size)+"_"+str(exp)+"_"+str(w) # used to name output text files, saved models, and graphs to identify
      #str(n_filters_conv3) + "-" + str(filter_size_conv3) + "-" +
 
 # Instantiate the game
