@@ -18,10 +18,10 @@ __email__ = "lechszym@cs.otago.ac.nz"
 ''' CONFIGURABLE PARAMETERS '''
 online = True
 explore = 0.1
-weight = 0.9
+weight = 0.99
 device = '/gpu:0'
 n_filters_conv1 = 16
-filter_size_conv1 = 2
+filter_size_conv1 = 3
 stride1 = 1
 n_filters_conv2 = 16
 filter_size_conv2 = 2
@@ -30,10 +30,6 @@ fc1_layer_size = 16
 exp = int(explore*100)
 w = int(weight*100)
 id = str(n_filters_conv1)+"-"+str(filter_size_conv1)+"-"+str(n_filters_conv2)+"-"+str(filter_size_conv2)+"-"+str(fc1_layer_size)+"_"+str(exp)+"_"+str(w) # added to saved models and graphs to identify
-
-''' PERSISTING PARAMETERS '''
-img_size = 4
-num_channels = 3
 
 # Instantiate the game
 
@@ -51,6 +47,10 @@ win_history = []
 
 # Change this to False to skip visualisations during training - they slow everything down
 show_vis = False
+
+''' PERSISTING PARAMETERS '''
+img_size = 4
+num_channels = 3
 
 def conv_relu_layer(input, n_input, n_filters, filter_size, stride):
     weights = tf.Variable(tf.truncated_normal(shape=[filter_size, filter_size, n_input, n_filters], stddev=0.05))
