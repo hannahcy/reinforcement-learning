@@ -17,7 +17,7 @@ __email__ = "lechszym@cs.otago.ac.nz"
 
 ''' CONFIGURABLE PARAMETERS '''
 online = True
-explore = 0.50
+chance_explore = 0.50
 weight = 0.99
 device = '/gpu:0'
 n_filters_conv1 = 16
@@ -30,7 +30,7 @@ stride2 = 1
 #filter_size_conv3 = 2
 #stride3 = 1
 fc1_layer_size = 64
-exp = int(explore*100)
+exp = int(chance_explore*10)
 w = int(weight*100)
 id = "non-slip-small-r"+str(n_filters_conv1)+"-"+str(filter_size_conv1)+"-"+str(n_filters_conv2)+"-"+str(filter_size_conv2)+"-"+ \
      str(fc1_layer_size)+"_"+str(exp)+"_"+str(w) # used to name output text files, saved models, and graphs to identify
@@ -133,7 +133,7 @@ with tf.device(device):
                     # If the environment got to the terminal state
                     # start a new episode and decrease likelihood of random exploration as it trains
                     if env.terminal():
-                        explore = 1.0/((i/50)+10)
+                        explore = 1.0/((i/50)+(1/chance_explore))
                         break
 
                     # Pick a random action - this is where your policy
