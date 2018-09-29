@@ -43,7 +43,7 @@ id = "non-slip-small-r"+str(n_filters_conv1)+"-"+str(filter_size_conv1)+"-"+str(
 env = frozenlakegame(R=-0.01)
 
 # Number of learning episodes
-num_episodes = 100000 # one hundred thousand -- things seem to have levelled off by then
+num_episodes = 500000 # one hundred thousand -- things seem to have levelled off by then
 # Maximum number of steps per episode
 max_steps_per_episode = 40
 
@@ -170,7 +170,7 @@ with tf.device(device):
                         #print(targetQ)
                         #print(a)
                         targetQ[0, a] = R + weight * max_q
-                        # Train our network using target and predicted Q values
+                        # Train the network using target and predicted Q values
                         _ = sess.run(optimizer, feed_dict={state: old_s, q_s_a: targetQ})
                         total_reward += R
 
