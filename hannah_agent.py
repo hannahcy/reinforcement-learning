@@ -40,7 +40,7 @@ id = "non-slip"+str(n_filters_conv1)+"-"+str(filter_size_conv1)+"-"+str(n_filter
 # You can change the reward value of the ice squares - by default it's 0, but it
 # might be a good idea to give it a small negative reward if you want your agent
 # to pick shorter paths
-env = frozenlakegame(R=-0.01)
+env = frozenlakegame(R=-0.05)
 
 # Number of learning episodes
 num_episodes = 100000 # one hundred thousand -- things seem to have levelled off by then
