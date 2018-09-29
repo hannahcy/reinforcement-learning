@@ -188,7 +188,7 @@ class frozenlakegame:
         if a<0 or a>3:
             raise Exception('Given action a=%d is out of bounds!  Valid actions are {0,...,%d}.' % (a, self.num_actions-1))
 
-        r = 1 # np.random.rand()
+        r = 1 #np.random.rand()
         if a==0 or a==2:
             if r < 0.1:
                 a = 1

@@ -32,7 +32,7 @@ stride2 = 1
 fc1_layer_size = 32
 exp = int(explore*100)
 w = int(weight*100)
-id = "non-slip-small-r"+str(n_filters_conv1)+"-"+str(filter_size_conv1)+"-"+str(n_filters_conv2)+"-"+str(filter_size_conv2)+"-"+ \
+id = "non-slip"+str(n_filters_conv1)+"-"+str(filter_size_conv1)+"-"+str(n_filters_conv2)+"-"+str(filter_size_conv2)+"-"+ \
      str(fc1_layer_size)+"_"+str(exp)+"_"+str(w) # used to name output text files, saved models, and graphs to identify
 #str(n_filters_conv3) + "-" + str(filter_size_conv3) + "-" +
 # Instantiate the game
@@ -40,7 +40,7 @@ id = "non-slip-small-r"+str(n_filters_conv1)+"-"+str(filter_size_conv1)+"-"+str(
 # You can change the reward value of the ice squares - by default it's 0, but it
 # might be a good idea to give it a small negative reward if you want your agent
 # to pick shorter paths
-env = frozenlakegame(R=-0.01)
+env = frozenlakegame(R=-0.05)
 
 # Number of learning episodes
 num_episodes = 100000 # one hundred thousand -- things seem to have levelled off by then
