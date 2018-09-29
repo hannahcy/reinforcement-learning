@@ -20,23 +20,20 @@ online = True
 explore = 0.10
 weight = 0.99
 device = '/gpu:0'
-n_filters_conv1 = 16
-filter_size_conv1 = 2
+n_filters_conv1 = 8
+filter_size_conv1 = 3
 stride1 = 1
-n_filters_conv2 = 16
-filter_size_conv2 = 2
+n_filters_conv2 = 8
+filter_size_conv2 = 3
 stride2 = 1
-#n_filters_conv3 = 64
-#filter_size_conv3 = 2
-#stride3 = 1
+n_filters_conv3 = 16
+filter_size_conv3 = 2
+stride3 = 1
 fc1_layer_size = 16
 exp = int(explore*100)
 w = int(weight*100)
-id = str(n_filters_conv1)+"-"+str(filter_size_conv1)+"-"+str(n_filters_conv2)+"-"+str(filter_size_conv2)+"-"+\
-     str(fc1_layer_size)+"_"+str(exp)+"_"+str(w) # used to name output text files, saved models, and graphs to identify
-
-    #
-     #str(n_filters_conv3) + "-" + str(filter_size_conv3) + "-" +
+id = str(n_filters_conv1)+"-"+str(filter_size_conv1)+"-"+str(n_filters_conv2)+"-"+str(filter_size_conv2)+"-"+ \
+     str(n_filters_conv3) + "-" + str(filter_size_conv3) + "-" +str(fc1_layer_size)+"_"+str(exp)+"_"+str(w) # used to name output text files, saved models, and graphs to identify
 
 # Instantiate the game
 
@@ -46,7 +43,7 @@ id = str(n_filters_conv1)+"-"+str(filter_size_conv1)+"-"+str(n_filters_conv2)+"-
 env = frozenlakegame(R=-0.05)
 
 # Number of learning episodes
-num_episodes = 1000000 # one hundred thousand -- things seem to have levelled off by then
+num_episodes = 100000 # one hundred thousand -- things seem to have levelled off by then
 # Maximum number of steps per episode
 max_steps_per_episode = 40
 
@@ -89,22 +86,21 @@ def fc_layer(input, n_inputs, n_outputs, use_relu=True):
 ''' SET UP TENSORFLOW MODEL '''
 
 with tf.device(device):
-    # set up VGG
     g = tf.Graph()
     with g.as_default():
 
         state = tf.placeholder(tf.float32, shape=[None, img_size, img_size, num_channels], name='state') # shape=[None, img_size, img_size, num_channels]
         q_s_a = tf.placeholder(tf.float32, shape=[None, env.num_actions])
-        #y_true = tf.placeholder(tf.float32, shape=[None, n_classes], name='y_true')
-        #y_true_class = tf.argmax(y_true, dimension=1)
         conv1 = conv_relu_layer(input=state, n_input=num_channels, n_filters=n_filters_conv1,
                                 filter_size=filter_size_conv1, stride = stride1)
-        conv2 = conv_relu_layer(input=conv1, n_input=n_filters_conv1, n_filters=n_filters_conv2,
+        max1 = maxpool_relu_layer(conv1)
+        conv2 = conv_relu_layer(input=max1, n_input=n_filters_conv1, n_filters=n_filters_conv2,
                                 filter_size=filter_size_conv2, stride = stride2)
-        #conv3 = conv_relu_layer(input=conv2, n_input=n_filters_conv2, n_filters=n_filters_conv3,
-        #                        filter_size=filter_size_conv3, stride=stride3)
-        max1 = maxpool_relu_layer(conv2)
-        flat = flat_layer(max1)
+        max2 = maxpool_relu_layer(conv2)
+        conv3 = conv_relu_layer(input=conv2, n_input=n_filters_conv2, n_filters=n_filters_conv3,
+                                filter_size=filter_size_conv3, stride=stride3)
+        max3 = maxpool_relu_layer(conv3)
+        flat = flat_layer(max3)
         fc1 = fc_layer(input=flat, n_inputs=flat.get_shape()[1:4].num_elements(), n_outputs=fc1_layer_size, use_relu=False)
         final = fc_layer(input=fc1, n_inputs=fc1_layer_size, n_outputs=env.num_actions, use_relu=False)
         loss = tf.losses.mean_squared_error(q_s_a, final)
