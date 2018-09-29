@@ -56,6 +56,8 @@ show_vis = False
 img_size = 4
 num_channels = 3
 
+explore = chance_explore
+
 def conv_relu_layer(input, n_input, n_filters, filter_size, stride):
     weights = tf.Variable(tf.truncated_normal(shape=[filter_size, filter_size, n_input, n_filters], stddev=0.05))
     biases = tf.Variable(tf.constant(0.05, shape=[n_filters]))
