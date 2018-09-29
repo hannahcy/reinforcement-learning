@@ -29,12 +29,12 @@ stride2 = 1
 n_filters_conv3 = 32
 filter_size_conv3 = 2
 stride3 = 1
-fc1_layer_size = 64
+fc1_layer_size = 32
 exp = int(explore*100)
 w = int(weight*100)
 id = "small-r"+str(n_filters_conv1)+"-"+str(filter_size_conv1)+"-"+str(n_filters_conv2)+"-"+str(filter_size_conv2)+"-"+ \
-     str(n_filters_conv3) + "-" + str(filter_size_conv3) + "-" +str(fc1_layer_size)+"_"+str(exp)+"_"+str(w) # used to name output text files, saved models, and graphs to identify
-
+     str(fc1_layer_size)+"_"+str(exp)+"_"+str(w) # used to name output text files, saved models, and graphs to identify
+#str(n_filters_conv3) + "-" + str(filter_size_conv3) + "-" +
 # Instantiate the game
 
 # You can change the reward value of the ice squares - by default it's 0, but it
@@ -97,10 +97,10 @@ with tf.device(device):
         conv2 = conv_relu_layer(input=max1, n_input=n_filters_conv1, n_filters=n_filters_conv2,
                                 filter_size=filter_size_conv2, stride = stride2)
         max2 = maxpool_relu_layer(conv2)
-        conv3 = conv_relu_layer(input=conv2, n_input=n_filters_conv2, n_filters=n_filters_conv3,
-                                filter_size=filter_size_conv3, stride=stride3)
-        max3 = maxpool_relu_layer(conv3)
-        flat = flat_layer(max3)
+        #conv3 = conv_relu_layer(input=conv2, n_input=n_filters_conv2, n_filters=n_filters_conv3,
+        #                        filter_size=filter_size_conv3, stride=stride3)
+        #max3 = maxpool_relu_layer(conv3)
+        flat = flat_layer(max2)
         fc1 = fc_layer(input=flat, n_inputs=flat.get_shape()[1:4].num_elements(), n_outputs=fc1_layer_size, use_relu=False)
         final = fc_layer(input=fc1, n_inputs=fc1_layer_size, n_outputs=env.num_actions, use_relu=False)
         loss = tf.losses.mean_squared_error(q_s_a, final)
