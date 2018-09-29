@@ -135,7 +135,8 @@ with tf.device(device):
                     # If the environment got to the terminal state
                     # start a new episode and decrease likelihood of random exploration as it trains
                     if env.terminal():
-                        explore = 1.0/((i/50)+(1/chance_explore))
+                        explore -= 0.00001  # 1.0/((i/50)+(1/chance_explore))
+                        explore = max(explore, 0.01)
                         break
 
                     # Pick a random action - this is where your policy
