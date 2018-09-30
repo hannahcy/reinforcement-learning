@@ -20,19 +20,19 @@ online = True
 chance_explore = 0.10
 weight = 0.99
 device = '/gpu:0'
-n_filters_conv1 = 128
+n_filters_conv1 = 4
 filter_size_conv1 = 2
 stride1 = 1
-n_filters_conv2 = 256
+n_filters_conv2 = 8
 filter_size_conv2 = 2
 stride2 = 1
 #n_filters_conv3 = 32
 #filter_size_conv3 = 2
 #stride3 = 1
-fc1_layer_size = 512
+fc1_layer_size = 16
 exp = int(chance_explore*10)
 w = int(weight*100)
-id = "non-slip-small-r"+str(n_filters_conv1)+"-"+str(filter_size_conv1)+"-"+str(n_filters_conv2)+"-"+str(filter_size_conv2)+"-"+ \
+id = str(n_filters_conv1)+"-"+str(filter_size_conv1)+"-"+str(n_filters_conv2)+"-"+str(filter_size_conv2)+"-"+ \
      str(fc1_layer_size)+"_"+str(exp)+"_"+str(w) # used to name output text files, saved models, and graphs to identify
 #str(n_filters_conv3) + "-" + str(filter_size_conv3) + "-" +
 # Instantiate the game
