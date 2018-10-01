@@ -17,8 +17,8 @@ __email__ = "lechszym@cs.otago.ac.nz"
 
 ''' CONFIGURABLE PARAMETERS '''
 chance_explore = 0.2
-weight = 0.9
-device = '/gpu:0'
+weight = 0.8
+device = '/cpu:0'
 n_filters_conv1 = 16
 filter_size_conv1 = 2
 stride1 = 1
@@ -31,8 +31,8 @@ stride2 = 1
 fc1_layer_size = 32
 exp = int(chance_explore*10)
 w = int(weight*100)
-id = "relu-fc-"+str(n_filters_conv1)+"-"+str(filter_size_conv1)+"-"+str(n_filters_conv2)+"-"+str(filter_size_conv2)+"-"+ \
-     str(fc1_layer_size)+"_"+str(exp)+"_"+str(w) # used to name output text files, saved models, and graphs to identify
+id = "final-relu-fc-"+str(n_filters_conv1)+"-"+str(filter_size_conv1)+"-"+str(n_filters_conv2)+"-"+str(filter_size_conv2)+"-"+ \
+     str(fc1_layer_size)+"_"+str(exp)+"_"+str(w)+"B" # used to name output text files, saved models, and graphs to identify
 #str(n_filters_conv3) + "-" + str(filter_size_conv3) + "-" +
 # Instantiate the game
 
@@ -43,7 +43,7 @@ env = frozenlakegame(R=-0.01)
 
 # Number of learning episodes
 # Number of learning episodes
-num_episodes = 500000 # one hundred thousand -- things seem to have levelled off by then
+num_episodes = 100000 # one hundred thousand -- things seem to have levelled off by then
 # Maximum number of steps per episode
 max_steps_per_episode = 40
 
