@@ -43,7 +43,7 @@ env = frozenlakegame(R=-0.01)
 
 # Number of learning episodes
 # Number of learning episodes
-num_episodes = 100000 # one hundred thousand -- things seem to have levelled off by then
+num_episodes = 500000 # one hundred thousand -- things seem to have levelled off by then
 # Maximum number of steps per episode
 max_steps_per_episode = 40
 
