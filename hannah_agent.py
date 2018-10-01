@@ -17,7 +17,7 @@ __email__ = "lechszym@cs.otago.ac.nz"
 
 ''' CONFIGURABLE PARAMETERS '''
 chance_explore = 0.2
-weight = 0.99
+weight = 0.9
 device = '/gpu:0'
 n_filters_conv1 = 16
 filter_size_conv1 = 2
@@ -43,7 +43,7 @@ env = frozenlakegame(R=-0.01)
 
 # Number of learning episodes
 # Number of learning episodes
-num_episodes = 500000 # one hundred thousand -- things seem to have levelled off by then
+num_episodes = 100000 # one hundred thousand -- things seem to have levelled off by then
 # Maximum number of steps per episode
 max_steps_per_episode = 40
 
