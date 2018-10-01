@@ -18,7 +18,7 @@ __email__ = "lechszym@cs.otago.ac.nz"
 ''' CONFIGURABLE PARAMETERS '''
 chance_explore = 0.2
 weight = 0.99
-device = '/cpu:0'
+device = '/gpu:0'
 n_filters_conv1 = 16
 filter_size_conv1 = 2
 stride1 = 1
@@ -103,7 +103,7 @@ with tf.device(device):
         #                        filter_size=filter_size_conv3, stride=stride3)
         #max3 = maxpool_relu_layer(conv3)
         flat = flatten(max2)
-        fc1 = fc_layer(input=flat, n_inputs=flat.get_shape()[1:4].num_elements(), n_outputs=fc1_layer_size, use_relu=False)
+        fc1 = fc_layer(input=flat, n_inputs=flat.get_shape()[1:4].num_elements(), n_outputs=fc1_layer_size, use_relu=True)
         final = fc_layer(input=fc1, n_inputs=fc1_layer_size, n_outputs=env.num_actions, use_relu=False)
         loss = tf.losses.mean_squared_error(q_s_a, final)
         optimizer = tf.train.AdamOptimizer().minimize(loss)
