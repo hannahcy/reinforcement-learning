@@ -16,23 +16,22 @@ __version__ = "1.0.0"
 __email__ = "lechszym@cs.otago.ac.nz"
 
 ''' CONFIGURABLE PARAMETERS '''
-online = True
-chance_explore = 0.3
+chance_explore = 0.2
 weight = 0.99
-device = '/gpu:0'
-n_filters_conv1 = 512
+device = '/cpu:0'
+n_filters_conv1 = 16
 filter_size_conv1 = 2
 stride1 = 1
-n_filters_conv2 = 16
+n_filters_conv2 = 32
 filter_size_conv2 = 2
 stride2 = 1
 #n_filters_conv3 = 32
 #filter_size_conv3 = 2
 #stride3 = 1
-fc1_layer_size = 1024
+fc1_layer_size = 32
 exp = int(chance_explore*10)
 w = int(weight*100)
-id = str(n_filters_conv1)+"-"+str(filter_size_conv1)+"-"+ \
+id = "relu-fc-"+str(n_filters_conv1)+"-"+str(filter_size_conv1)+"-"+str(n_filters_conv2)+"-"+str(filter_size_conv2)+"-"+ \
      str(fc1_layer_size)+"_"+str(exp)+"_"+str(w) # used to name output text files, saved models, and graphs to identify
 #str(n_filters_conv3) + "-" + str(filter_size_conv3) + "-" +
 # Instantiate the game
@@ -43,7 +42,8 @@ id = str(n_filters_conv1)+"-"+str(filter_size_conv1)+"-"+ \
 env = frozenlakegame(R=-0.01)
 
 # Number of learning episodes
-num_episodes = 100000 # one hundred thousand -- things seem to have levelled off by then
+# Number of learning episodes
+num_episodes = 500000 # one hundred thousand -- things seem to have levelled off by then
 # Maximum number of steps per episode
 max_steps_per_episode = 40
 
@@ -96,21 +96,19 @@ with tf.device(device):
         conv1 = conv_relu_layer(input=state, n_input=num_channels, n_filters=n_filters_conv1,
                                 filter_size=filter_size_conv1, stride = stride1)
         max1 = maxpool_relu_layer(conv1)
-        #conv2 = conv_relu_layer(input=max1, n_input=n_filters_conv1, n_filters=n_filters_conv2,
-        #                        filter_size=filter_size_conv2, stride = stride2)
-        #max2 = maxpool_relu_layer(conv2)
+        conv2 = conv_relu_layer(input=max1, n_input=n_filters_conv1, n_filters=n_filters_conv2,
+                                filter_size=filter_size_conv2, stride = stride2)
+        max2 = maxpool_relu_layer(conv2)
         #conv3 = conv_relu_layer(input=conv2, n_input=n_filters_conv2, n_filters=n_filters_conv3,
         #                        filter_size=filter_size_conv3, stride=stride3)
         #max3 = maxpool_relu_layer(conv3)
-        flat = flatten(max1)
+        flat = flatten(max2)
         fc1 = fc_layer(input=flat, n_inputs=flat.get_shape()[1:4].num_elements(), n_outputs=fc1_layer_size, use_relu=False)
         final = fc_layer(input=fc1, n_inputs=fc1_layer_size, n_outputs=env.num_actions, use_relu=False)
         loss = tf.losses.mean_squared_error(q_s_a, final)
         optimizer = tf.train.AdamOptimizer().minimize(loss)
 
         saver = tf.train.Saver()
-        played_states = []
-        played_rewards = []
         # session run with one kind of label
         with tf.Session() as sess:
             sess.run(tf.global_variables_initializer())
@@ -145,11 +143,13 @@ with tf.device(device):
                     # player's movement towards N,E,S and W.
                     #
                     # ...
+
+                    # Network uses the current state to obtain expected Q values for possible actions
                     st = np.reshape(s,[1,4,4,3])
                     q_list = sess.run(final, feed_dict={state: st})
-                    a = np.argmax(q_list)
+                    a = np.argmax(q_list) # choose the action with the highest expected value
                     if np.random.rand(1) < explore:
-                        a = np.random.randint(0, env.num_actions)
+                        a = np.random.randint(0, env.num_actions) # but maybe behave randomly in the interest of exploration
                     old_s = st
                     # Execute the action, get the next state and the reward
                     s, R = env.step(a)
@@ -160,19 +160,17 @@ with tf.device(device):
                     # the policy in the batch mode
                     #
                     # ...
-                    if online:
-                        # Obtain the Q' values by feeding the new state through our network
-                        st = np.reshape(s,[1,4,4,3])
-                        q_list_next = sess.run(final, feed_dict={state: st})
-                        # Obtain maxQ' and set our target value for chosen action.
-                        max_q = np.max(q_list_next)
-                        targetQ = q_list
-                        #print(targetQ)
-                        #print(a)
-                        targetQ[0, a] = R + weight * max_q
-                        # Train the network using target and predicted Q values
-                        _ = sess.run(optimizer, feed_dict={state: old_s, q_s_a: targetQ})
-                        total_reward += R
+
+                    # Obtain the next Q values by feeding the new state through network
+                    st = np.reshape(s,[1,4,4,3])
+                    q_list_next = sess.run(final, feed_dict={state: st})
+                    # Obtain maxQ' and set our target value for chosen action.
+                    max_q = np.max(q_list_next)
+                    targetQ = q_list
+                    targetQ[0, a] = R + weight * max_q # update our original predicted
+                    # Train the network using target and predicted Q values
+                    _ = sess.run(optimizer, feed_dict={state: old_s, q_s_a: targetQ})
+                    total_reward += R
 
                     # Shows the new state of the environment - only the player's location
                     # might change
@@ -184,8 +182,6 @@ with tf.device(device):
                 # to improve the policy
                 #
                 # ...
-                played_states.append(i)
-                played_rewards.append(total_reward)
 
                 infoStr = "Episode %d, " % (e+1)
                 if R==1:
