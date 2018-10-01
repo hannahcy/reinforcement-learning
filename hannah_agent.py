@@ -17,22 +17,22 @@ __email__ = "lechszym@cs.otago.ac.nz"
 
 ''' CONFIGURABLE PARAMETERS '''
 online = True
-chance_explore = 0.10
+chance_explore = 0.3
 weight = 0.99
 device = '/gpu:0'
-n_filters_conv1 = 4
+n_filters_conv1 = 512
 filter_size_conv1 = 2
 stride1 = 1
-n_filters_conv2 = 8
+n_filters_conv2 = 16
 filter_size_conv2 = 2
 stride2 = 1
 #n_filters_conv3 = 32
 #filter_size_conv3 = 2
 #stride3 = 1
-fc1_layer_size = 16
+fc1_layer_size = 1024
 exp = int(chance_explore*10)
 w = int(weight*100)
-id = str(n_filters_conv1)+"-"+str(filter_size_conv1)+"-"+str(n_filters_conv2)+"-"+str(filter_size_conv2)+"-"+ \
+id = str(n_filters_conv1)+"-"+str(filter_size_conv1)+"-"+ \
      str(fc1_layer_size)+"_"+str(exp)+"_"+str(w) # used to name output text files, saved models, and graphs to identify
 #str(n_filters_conv3) + "-" + str(filter_size_conv3) + "-" +
 # Instantiate the game
@@ -71,7 +71,7 @@ def maxpool_relu_layer(input):
     m_r_layer = tf.nn.relu(m_layer)
     return m_r_layer
 
-def flat_layer(input_layer):
+def flatten(input_layer):
     shape = input_layer.get_shape()
     num_features = shape[1:4].num_elements()
     flat_layer = tf.reshape(input_layer, [-1, num_features])
@@ -96,13 +96,13 @@ with tf.device(device):
         conv1 = conv_relu_layer(input=state, n_input=num_channels, n_filters=n_filters_conv1,
                                 filter_size=filter_size_conv1, stride = stride1)
         max1 = maxpool_relu_layer(conv1)
-        conv2 = conv_relu_layer(input=max1, n_input=n_filters_conv1, n_filters=n_filters_conv2,
-                                filter_size=filter_size_conv2, stride = stride2)
-        max2 = maxpool_relu_layer(conv2)
+        #conv2 = conv_relu_layer(input=max1, n_input=n_filters_conv1, n_filters=n_filters_conv2,
+        #                        filter_size=filter_size_conv2, stride = stride2)
+        #max2 = maxpool_relu_layer(conv2)
         #conv3 = conv_relu_layer(input=conv2, n_input=n_filters_conv2, n_filters=n_filters_conv3,
         #                        filter_size=filter_size_conv3, stride=stride3)
         #max3 = maxpool_relu_layer(conv3)
-        flat = flat_layer(max2)
+        flat = flatten(max1)
         fc1 = fc_layer(input=flat, n_inputs=flat.get_shape()[1:4].num_elements(), n_outputs=fc1_layer_size, use_relu=False)
         final = fc_layer(input=fc1, n_inputs=fc1_layer_size, n_outputs=env.num_actions, use_relu=False)
         loss = tf.losses.mean_squared_error(q_s_a, final)
