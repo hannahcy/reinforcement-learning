@@ -16,9 +16,9 @@ __version__ = "1.0.0"
 __email__ = "lechszym@cs.otago.ac.nz"
 
 ''' CONFIGURABLE PARAMETERS '''
-chance_explore = 0.1
+chance_explore = 0.2
 weight = 0.85
-device = '/cpu:0'
+device = '/gpu:0'
 n_filters_conv1 = 16
 filter_size_conv1 = 2
 stride1 = 1
