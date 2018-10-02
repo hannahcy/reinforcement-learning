@@ -16,8 +16,8 @@ __version__ = "1.0.0"
 __email__ = "lechszym@cs.otago.ac.nz"
 
 ''' CONFIGURABLE PARAMETERS '''
-chance_explore = 0.2
-weight = 0.85
+chance_explore = 0.35
+weight = 0.95
 device = '/gpu:0'
 n_filters_conv1 = 16
 filter_size_conv1 = 2
@@ -33,7 +33,7 @@ fc1_layer_size = 32
 exp = int(chance_explore*10)
 w = int(weight*100)
 id = "final-"+str(n_filters_conv1)+"-"+str(filter_size_conv1)+"-"+str(n_filters_conv2)+"-"+str(filter_size_conv2)+"-"+ \
-     str(fc1_layer_size)+"_"+str(exp)+"_"+str(w)+"G" # used to name output text files, saved models, and graphs to identify
+     str(fc1_layer_size)+"_"+str(exp)+"_"+str(w)+"final" # used to name output text files, saved models, and graphs to identify
 #str(n_filters_conv3) + "-" + str(filter_size_conv3) + "-" +
 # Instantiate the game
 
